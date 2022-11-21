@@ -18,9 +18,7 @@ class User(AbstractUser):
         default=ROLES.buyer,
     )
 
-    deposit = models.PositiveIntegerField(
-        default=0
-    )
+    deposit = models.PositiveIntegerField(default=0)
 
 
 # Create your models here.

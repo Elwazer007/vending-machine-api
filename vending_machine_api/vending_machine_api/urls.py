@@ -19,17 +19,17 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
 
-from products.views import ProductViewSet 
-from users.views import UsersViewSet , SignUpAPI
+from products.views import ProductViewSet
+from users.views import UsersViewSet, SignUpAPI
+
 router = routers.SimpleRouter()
 
-router.register(r'api/users',UsersViewSet , basename='users')
-router.register(r'api/products',ProductViewSet , basename = 'producrs')
+router.register(r"api/users", UsersViewSet, basename="users")
+router.register(r"api/products", ProductViewSet, basename="producrs")
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/register/' ,SignUpAPI.as_view())
-
+    path("admin/", admin.site.urls),
+    path("api/register/", SignUpAPI.as_view()),
 ]
-urlpatterns+=router.urls
+urlpatterns += router.urls
