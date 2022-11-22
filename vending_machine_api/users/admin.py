@@ -9,4 +9,4 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    fields = ("username", "role", "deposit")

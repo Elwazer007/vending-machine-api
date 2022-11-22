@@ -8,6 +8,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, viewsets, status
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 # Create your views here.
@@ -42,15 +46,28 @@ class UsersViewSet(
             request.user, data=request.data, context=self.get_serializer_context()
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user_data = UserSerializer(request.user).data
 
-        return Response(data=user_data, status=status.HTTP_201_CREATED)
+        try:
+            serializer.save()
+            user_data = UserSerializer(request.user).data
+
+            return Response(data=user_data, status=status.HTTP_201_CREATED)
+        except Exception:
+            logger.exception("Deposit failed")
+            return Response(
+                "Deposit failed ", status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     @action(detail=False, methods=["patch"], serializer_class=None)
     def reset(self, request, pk=None):
-        user = request.user
-        user.deposit = 0
-        user.save()
-        user_data = UserSerializer(user).data
-        return Response(data=user_data, status=status.HTTP_201_CREATED)
+        try:
+            user = request.user
+            user.deposit = 0
+            user.save()
+            user_data = UserSerializer(user).data
+            return Response(data=user_data, status=status.HTTP_201_CREATED)
+        except Exception:
+            logger.exception("Reset failed")
+            return Response(
+                "Reset failed ", status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

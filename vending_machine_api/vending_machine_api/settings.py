@@ -130,3 +130,28 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
 }
+
+LOGGING = {
+    "version": 1,
+    # The version number of our log
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file_warning": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "warning.log",
+        },
+        "file_error": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "error.log",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["file_warning", "file_error"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+    },
+}

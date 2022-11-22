@@ -1,6 +1,9 @@
 from rest_access_policy import AccessPolicy
+import logging
 
 from users.models import ROLES
+
+logger = logging.getLogger(__name__)
 
 
 class ProductAccessPolicy(AccessPolicy):
@@ -26,7 +29,11 @@ class ProductAccessPolicy(AccessPolicy):
     ]
 
     def is_request_from_product_seller(self, request, view, action):
-        product = view.get_object()
+        try:
+            product = view.get_object()
+        except AssertionError:
+            logger.warning(f"Endpoint {action} called without provided pk")
+            return True
         product_seller_id = product.seller.id
         request_user_id = request.user.id
         return product_seller_id == request_user_id

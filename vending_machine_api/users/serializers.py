@@ -33,13 +33,10 @@ class AccountDepositSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["deposit"]
+        extra_kwargs = {"deposit": {"required": True}}
 
     def validate(self, data):
 
-        if "deposit" not in data:
-            raise serializers.ValidationError(
-                "Endpoint has been called without providing deposit value"
-            )
         if data["deposit"] not in ALLOWED_COINS_TO_DEPOSIT:
             raise serializers.ValidationError(
                 "Endpoint has been called with invalid deposit amount value shloud be  5, 10, 20, 50 or 100."
